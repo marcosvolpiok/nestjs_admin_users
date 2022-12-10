@@ -13,7 +13,14 @@ export class UserService {
     constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
     async getUser(): Promise<User[]> {
-        const user = await this.userModel.find();
+        const userFields = {
+            firstName: 1,
+            lastName: 1,
+            address: 1,
+            image: 1,
+            user: 1
+        }
+        const user = await this.userModel.find({}, userFields);
         return user;
     }
     
