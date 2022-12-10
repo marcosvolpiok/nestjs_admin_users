@@ -6,6 +6,6 @@ export interface User extends Document {
     readonly address: string;
     readonly image: string;
     readonly user: string;
-    readonly password: string;
+    password: string;
     readonly createdAt: Date;
 }
