@@ -23,10 +23,22 @@ export class UserService {
         const user = await this.userModel.find({}, userFields);
         return user;
     }
+
+    async getUserByUsername(userLogin: String): Promise<User> {
+        // const userFields = {
+        //     firstName: 1,
+        //     lastName: 1,
+        //     address: 1,
+        //     image: 1,
+        //     user: 1
+        // }
+        const user = await this.userModel.findOne({user: userLogin});
+        return user;
+    }    
     
     async createUser(createUserDTO: CreateUserDTO): Promise<User> {
         const newUser = new this.userModel(createUserDTO);
-        newUser.password = await bcrypt.hash(newUser.password, 10);;
+        newUser.password = await bcrypt.hash(newUser.password, 10);
         return newUser.save();
     }
 }
