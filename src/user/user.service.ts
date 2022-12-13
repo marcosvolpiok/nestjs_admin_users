@@ -25,20 +25,30 @@ export class UserService {
     }
 
     async getUserByUsername(userLogin: String): Promise<User> {
-        // const userFields = {
-        //     firstName: 1,
-        //     lastName: 1,
-        //     address: 1,
-        //     image: 1,
-        //     user: 1
-        // }
         const user = await this.userModel.findOne({user: userLogin});
         return user;
-    }    
+    } 
+    
+    async getUserById(id: Number): Promise<User> {
+        const user = await this.userModel.findById(id);
+
+        return user;
+    }
     
     async createUser(createUserDTO: CreateUserDTO): Promise<User> {
         const newUser = new this.userModel(createUserDTO);
         newUser.password = await bcrypt.hash(newUser.password, 10);
+
         return newUser.save();
+    }
+
+    async updateUser(id: Number, createUserDTO: CreateUserDTO): Promise<User> {
+        if(createUserDTO.password) {
+            createUserDTO.password = await bcrypt.hash(createUserDTO.password, 10);
+        }
+        
+        const updatedUser = await this.userModel
+        .findByIdAndUpdate(id, createUserDTO, {new: true});
+        return updatedUser;
     }
 }

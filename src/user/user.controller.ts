@@ -9,11 +9,10 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class UserController {
     constructor(private userService: UserService) { }
 
-    //@UseGuards(LocalAuthGuard)
-
-    @Put('/')
+    @Post('/')
     async createUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
         const user = await this.userService.createUser(createUserDTO);
+
         return res.status(HttpStatus.OK).json({
             message: 'User Successfully Created',
             user
@@ -21,9 +20,18 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Put('/:id')
+    async updateUser(@Res() res, @Param('id') id, @Body() createUserDTO: CreateUserDTO) {
+        const updatedUser = await this.userService.updateUser(id, createUserDTO);
+        
+        return res.status(HttpStatus.OK).json(updatedUser);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get('/')
     async getUsers(@Res() res) {
         const users = await this.userService.getUser();
+
         return res.status(HttpStatus.OK).json(users);
     }
 }
