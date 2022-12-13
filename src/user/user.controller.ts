@@ -2,7 +2,6 @@
 import { Controller, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put, UseGuards } from '@nestjs/common';
 import { UserService } from "./user.service";
 import { CreateUserDTO } from "./dto/user.dto";
-import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('user')
@@ -22,9 +21,15 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Put('/:id')
     async updateUser(@Res() res, @Param('id') id, @Body() createUserDTO: CreateUserDTO) {
-        const updatedUser = await this.userService.updateUser(id, createUserDTO);
-        
-        return res.status(HttpStatus.OK).json(updatedUser);
+        if (await this.userService.getUserById(id)) {
+            const updatedUser = await this.userService.updateUser(id, createUserDTO);
+
+            return res.status(HttpStatus.OK).json(updatedUser);
+        } else {
+            return res.status(HttpStatus.NOT_FOUND).json({
+                message: 'User Not Found',
+            });
+        }
     }
 
     @UseGuards(JwtAuthGuard)

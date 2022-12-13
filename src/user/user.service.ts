@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 const bcrypt = require('bcrypt');
 
-import { Model } from "mongoose";
+import { Model, isValidObjectId } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-
 import { User } from "./interfaces/user.interface";
 import { CreateUserDTO } from "./dto/user.dto";
 
@@ -29,10 +28,12 @@ export class UserService {
         return user;
     } 
     
-    async getUserById(id: Number): Promise<User> {
-        const user = await this.userModel.findById(id);
+    async getUserById(id: String): Promise<User> {
+        if(isValidObjectId(id) && await this.userModel.findById(id)) {
+            return await this.userModel.findById(id);
+        }
 
-        return user;
+        return null;
     }
     
     async createUser(createUserDTO: CreateUserDTO): Promise<User> {
