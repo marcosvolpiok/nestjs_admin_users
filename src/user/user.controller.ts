@@ -14,12 +14,18 @@ export class UserController {
 
     @Post('/')
     async createUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
-        const user = await this.userService.createUser(createUserDTO);
+        if (await this.userService.getUserByUsername(createUserDTO.user)) {
+            return res.status(HttpStatus.BAD_REQUEST).json({
+                message: 'User Already Exists',
+            });
+        } else {
+            const user = await this.userService.createUser(createUserDTO);
 
-        return res.status(HttpStatus.OK).json({
-            message: 'User Successfully Created',
-            user
-        });
+            return res.status(HttpStatus.OK).json({
+                message: 'User Successfully Created',
+                user
+            });
+        }
     }
 
     @UseGuards(JwtAuthGuard)

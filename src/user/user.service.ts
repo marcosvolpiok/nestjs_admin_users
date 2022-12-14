@@ -21,11 +21,13 @@ export class UserService {
             user: 1
         }
         const user = await this.userModel.find({}, userFields);
+
         return user;
     }
 
     async getUserByUsername(userLogin: String): Promise<User> {
         const user = await this.userModel.findOne({user: userLogin});
+
         return user;
     } 
     
