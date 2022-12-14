@@ -8,14 +8,14 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/challenge_kenility', {
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
+    MongooseModule.forRoot(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB_NAME}`, {
       useNewUrlParser: true
     }),
     UserModule,
     AuthModule,
-    ConfigModule.forRoot({
-      envFilePath: '.env',
-    })
   ],
   controllers: [AppController],
   providers: [S3Service],
