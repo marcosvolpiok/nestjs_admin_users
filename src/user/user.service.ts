@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 import { Model, isValidObjectId } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./interfaces/user.interface";
-import { CreateUserDTO } from "./dto/user.dto";
+import { CreateUserDTO } from "./dto/createUser.dto";
+import { UpdateImageDTO } from "./dto/updateImage.dto";
 
 @Injectable()
 export class UserService {
@@ -52,4 +53,10 @@ export class UserService {
         .findByIdAndUpdate(id, createUserDTO, {new: true});
         return updatedUser;
     }
+
+    async updateImage(id: Number, updateImageDTO: UpdateImageDTO): Promise<User> {
+        const updatedUser = await this.userModel
+        .findByIdAndUpdate(id, updateImageDTO, {new: true});
+        return updatedUser;
+    }    
 }

@@ -1,7 +1,8 @@
 
 import { Controller, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put, UseGuards } from '@nestjs/common';
 import { UserService } from "./user.service";
-import { CreateUserDTO } from "./dto/user.dto";
+import { CreateUserDTO } from "./dto/createUser.dto";
+import { UpdateImageDTO } from "./dto/updateImage.dto";
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile, UseInterceptors } from '@nestjs/common';
@@ -51,16 +52,10 @@ export class UserController {
         if (user) {
             const result = await this.s3Service.uploadFile(file);
             if(result.Location) {
-                const createUserDTO: CreateUserDTO = {
-                    image: result.Location,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    address: user.address,
-                    user: user.user,
-                    password: user.password,
-                    createdAt: user.createdAt,
+                const updateImageDTO: UpdateImageDTO = {
+                    image: result.Location
                 }
-                const userUpdated = await this.userService.updateUser(id, createUserDTO);
+                const userUpdated = await this.userService.updateImage(id, updateImageDTO);
 
                 return res.status(HttpStatus.OK).json(userUpdated);
             }
