@@ -26,23 +26,33 @@ Importing these files (files: *Challenge Kenility.postman_collection.json* and *
  
 ## Using the API 
 You can sign up on the API by creating a user with the endpoint:
+
 ``
 http://{{host}}:{{port}}/user
 ``
+
 So, you'll need to log in with the endpoint: 
+
 ``
 http://{{host}}:{{port}}/login
 ``
+
 Next, you should set the Bearer Token on Postman with that token (you can set the environment variable).
+
 Then you'll be able to get the users with the endpoint: 
+
 ``
 http://{{host}}:{{port}}/user,
 ``
+
 Update any user: 
+
 ``
 http://{{host}}:{{port}}/user/:id
 ``
+
 Upload files with the endpoint:
+
 ``
 http://{{host}}:{{port}}/user/avatar/:id)
 ``
