@@ -14,13 +14,20 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Res() res, @Request() req) {
+    let response;
+
     try {
       const result = await this.authService.login(req.user);
-      return this.responseService.getResponse(result, 'OK');
+      
+      response = res.status(HttpStatus.OK).json(
+        this.responseService.getResponse(result, 'OK')
+      );
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+      response = res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
         this.responseService.getResponse(error.message, 'ERROR')
       );
     }
+
+    return response;
   } 
 }
