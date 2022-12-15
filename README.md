@@ -8,3 +8,8 @@ Create a user with name, last name, address, and profile picture (this should be
 Retrieve users.
 Update user.
 Star point: Dockerize MongoDB and the Node API
+
+
+* Run *
+docker build .
+docker-compose up
