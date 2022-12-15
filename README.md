@@ -13,3 +13,6 @@ Star point: Dockerize MongoDB and the Node API
 * Run *
 docker build .
 docker-compose up
+
+* Install seeds *
+sudo docker-compose run --rm challenge npx nestjs-command create:user
