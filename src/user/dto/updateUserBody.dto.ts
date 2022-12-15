@@ -1,5 +1,4 @@
 import { IsNotEmpty } from 'class-validator';
-import { IsUserAlreadyExist } from '../validations/user-is-not-repeated'
 export class UpdateUserBodyDTO {
   @IsNotEmpty()
   readonly firstName: string;
