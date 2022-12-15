@@ -4,7 +4,6 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { UserService } from '../user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../user/schemas/user.schema';
@@ -19,7 +18,7 @@ import { S3Service } from '../s3-service/s3-service.service';
     }),
     PassportModule,
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: process.env.JWT_PRIVATE_KEY,
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}])
