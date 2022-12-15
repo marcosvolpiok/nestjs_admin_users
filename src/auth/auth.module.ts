@@ -8,13 +8,17 @@ import { jwtConstants } from './constants';
 import { UserService } from '../user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../user/schemas/user.schema';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '24h' },
+      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}])
   ],
