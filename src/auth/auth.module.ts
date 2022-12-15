@@ -10,6 +10,7 @@ import { UserSchema } from '../user/schemas/user.schema';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { S3Service } from '../s3-service/s3-service.service';
+import { ResponseService } from '../response/response.service';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { S3Service } from '../s3-service/s3-service.service';
     }),
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}])
   ],
-  providers: [AuthService, LocalStrategy, UserService, JwtStrategy, S3Service],
+  providers: [AuthService, LocalStrategy, UserService, JwtStrategy, S3Service, ResponseService],
   exports: [AuthService, UserService],
   controllers: [AuthController]
 })
