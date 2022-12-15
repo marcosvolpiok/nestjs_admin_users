@@ -22,15 +22,21 @@ export class UserController {
     @Post('/')
     async createUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
         let response;
-        const user = await this.userService.createUser(createUserDTO);
-        
-        response = res.status(HttpStatus.CREATED).json(
-            this.responseService.getResponse(
-                {user, message: 'User Successfully Created'}
-                , 'OK'
-            )
-        )
 
+        try {
+            const user = await this.userService.createUser(createUserDTO);
+            
+            response = res.status(HttpStatus.CREATED).json(
+                this.responseService.getResponse(
+                    {user, message: 'User Successfully Created'}
+                    , 'OK'
+                )
+            )
+        } catch (error) {
+            response = res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+              this.responseService.getResponse(error.message, 'ERROR')
+            );
+        }
         return response;
     }
 
@@ -38,6 +44,8 @@ export class UserController {
     @Put('/:id')
     async updateUser(@Res() res, @Param() updateUserDTO: UpdateUserDTO, @Body() updateUserBodyDTO: UpdateUserBodyDTO) {
         let response;
+
+        try {
         const updatedUser = await this.userService.updateUser(updateUserDTO.id, updateUserBodyDTO);
 
         response = res.status(HttpStatus.OK).json(
@@ -45,6 +53,11 @@ export class UserController {
                 updatedUser,
                 'OK')
         )
+        } catch (error) {
+            response = res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+            this.responseService.getResponse(error.message, 'ERROR')
+            );
+        }
 
         return response;
     }
@@ -53,6 +66,8 @@ export class UserController {
     @Get('/')
     async getUsers(@Res() res) {
         let response;
+
+        try {
         const users = await this.userService.getUser();
 
         response = res.status(HttpStatus.OK).json(
@@ -60,6 +75,12 @@ export class UserController {
                 users,
                 'OK')
         )
+        } catch (error) {
+            response = res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+            this.responseService.getResponse(error.message, 'ERROR')
+            );
+        }
+
         return response;
     }
 
@@ -68,8 +89,10 @@ export class UserController {
     @UseInterceptors(FileInterceptor('file'))
     async uploadFile(@Res() res, @UploadedFile() file: Express.Multer.File, @Param() updateUserDTO: UpdateUserDTO) {
         let response;
+
+        try {
         const result = await this.s3Service.uploadFile(file);
-        
+
         if(result.Location) {
             const updateImageDTO: UpdateImageDTO = {
                 image: result.Location
@@ -82,7 +105,12 @@ export class UserController {
                     'OK')
             )
         }
-
+        } catch (error) {
+            response = res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+            this.responseService.getResponse(error.message, 'ERROR')
+            );
+        }
+        
         return response;
     }     
 }
