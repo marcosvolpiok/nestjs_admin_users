@@ -66,28 +66,21 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Put('avatar/:id')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadFile(@Res() res, @UploadedFile() file: Express.Multer.File, @Param('id') id) {
+    async uploadFile(@Res() res, @UploadedFile() file: Express.Multer.File, @Param() updateUserDTO: UpdateUserDTO) {
         let response;
-        const user = await this.userService.getUserById(id);
-
-        if (user) {
-            const result = await this.s3Service.uploadFile(file);
-            if(result.Location) {
-                const updateImageDTO: UpdateImageDTO = {
-                    image: result.Location
-                }
-                const userUpdated = await this.userService.updateImage(id, updateImageDTO);
-
-                response = res.status(HttpStatus.OK).json(
-                    this.responseService.getResponse(
-                        userUpdated,
-                        'OK')
-                )
+        const result = await this.s3Service.uploadFile(file);
+        
+        if(result.Location) {
+            const updateImageDTO: UpdateImageDTO = {
+                image: result.Location
             }
-        } else {
-            response = res.status(HttpStatus.NOT_FOUND).json({
-                message: 'User Not Found',
-            });
+            const userUpdated = await this.userService.updateImage(updateUserDTO.id, updateImageDTO);
+
+            response = res.status(HttpStatus.OK).json(
+                this.responseService.getResponse(
+                    userUpdated,
+                    'OK')
+            )
         }
 
         return response;
