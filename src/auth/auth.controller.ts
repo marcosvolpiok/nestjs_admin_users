@@ -3,7 +3,6 @@ import { Controller, Request, Post, UseGuards, Res, HttpStatus } from '@nestjs/c
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { ResponseService } from '../response/response.service';
-import { ResponseInterface } from '../response/response.interface';
 
 @Controller()
 export class AuthController {
