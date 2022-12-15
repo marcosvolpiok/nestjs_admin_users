@@ -9,6 +9,8 @@ import { UserService } from '../user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../user/schemas/user.schema';
 import { ConfigModule } from '@nestjs/config';
+import { AuthController } from './auth.controller';
+import { S3Service } from '../s3-service/s3-service.service';
 
 @Module({
   imports: [
@@ -22,7 +24,8 @@ import { ConfigModule } from '@nestjs/config';
     }),
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}])
   ],
-  providers: [AuthService, LocalStrategy, UserService, JwtStrategy],
+  providers: [AuthService, LocalStrategy, UserService, JwtStrategy, S3Service],
   exports: [AuthService, UserService],
+  controllers: [AuthController]
 })
 export class AuthModule {}
