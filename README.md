@@ -12,7 +12,8 @@ Star point: Dockerize MongoDB and the Node API
 ## Run
 ``
 docker build .
-
+``
+``
 docker-compose up
 ``
  
