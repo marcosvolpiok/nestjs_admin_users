@@ -8,6 +8,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile, UseInterceptors } from '@nestjs/common';
 import { S3Service } from '../s3-service/s3-service.service';
 import { ResponseService } from '../response/response.service';
+import { UpdateUserDTO } from './dto/updateUser.dto';
+import { UpdateUserBodyDTO } from './dto/updateUserBody.dto';
 
 @Controller('user')
 export class UserController {
@@ -20,43 +22,29 @@ export class UserController {
     @Post('/')
     async createUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
         let response;
-
-        if (await this.userService.getUserByUsername(createUserDTO.user)) {
-            response = res.status(HttpStatus.BAD_REQUEST).json({
-                message: 'User Already Exists',
-            });
-        } else {
-            const user = await this.userService.createUser(createUserDTO);
-            
-            response = res.status(HttpStatus.CREATED).json(
-                this.responseService.getResponse(
-                    {user, message: 'User Successfully Created'}
-                    , 'OK'
-                )
+        const user = await this.userService.createUser(createUserDTO);
+        
+        response = res.status(HttpStatus.CREATED).json(
+            this.responseService.getResponse(
+                {user, message: 'User Successfully Created'}
+                , 'OK'
             )
-        }
+        )
 
         return response;
     }
 
     @UseGuards(JwtAuthGuard)
     @Put('/:id')
-    async updateUser(@Res() res, @Param('id') id, @Body() createUserDTO: CreateUserDTO) {
+    async updateUser(@Res() res, @Param() updateUserDTO: UpdateUserDTO, @Body() updateUserBodyDTO: UpdateUserBodyDTO) {
         let response;
+        const updatedUser = await this.userService.updateUser(updateUserDTO.id, updateUserBodyDTO);
 
-        if (await this.userService.getUserById(id)) {
-            const updatedUser = await this.userService.updateUser(id, createUserDTO);
-
-            response = res.status(HttpStatus.OK).json(
-                this.responseService.getResponse(
-                    updatedUser,
-                    'OK')
-            )
-        } else {
-            response = res.status(HttpStatus.NOT_FOUND).json({
-                message: 'User Not Found',
-            });
-        }
+        response = res.status(HttpStatus.OK).json(
+            this.responseService.getResponse(
+                updatedUser,
+                'OK')
+        )
 
         return response;
     }

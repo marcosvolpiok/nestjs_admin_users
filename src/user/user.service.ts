@@ -46,7 +46,7 @@ export class UserService {
         return newUser.save();
     }
 
-    async updateUser(id: Number, createUserDTO: CreateUserDTO): Promise<User> {
+    async updateUser(id: String, createUserDTO: CreateUserDTO): Promise<User> {
         if(createUserDTO.password) {
             createUserDTO.password = await bcrypt.hash(createUserDTO.password, 10);
         }
@@ -56,7 +56,7 @@ export class UserService {
         return updatedUser;
     }
 
-    async updateImage(id: Number, updateImageDTO: UpdateImageDTO): Promise<User> {
+    async updateImage(id: String, updateImageDTO: UpdateImageDTO): Promise<User> {
         const updatedUser = await this.userModel
         .findByIdAndUpdate(id, updateImageDTO, {new: true});
         return updatedUser;
