@@ -7,10 +7,15 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile, UseInterceptors } from '@nestjs/common';
 import { S3Service } from '../s3-service/s3-service.service';
+import { ResponseService } from '../response/response.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private userService: UserService, private s3Service: S3Service) { }
+    constructor(
+        private userService: UserService,
+        private s3Service: S3Service,
+        private responseService: ResponseService
+    ) { }
 
     @Post('/')
     async createUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
@@ -20,11 +25,10 @@ export class UserController {
             });
         } else {
             const user = await this.userService.createUser(createUserDTO);
-
-            return res.status(HttpStatus.OK).json({
-                message: 'User Successfully Created',
-                user
-            });
+            
+            return this.responseService.getResponse(
+                {user, message: 'User Successfully Created'}
+                , 'OK');
         }
     }
 
