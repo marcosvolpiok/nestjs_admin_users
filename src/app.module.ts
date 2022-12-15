@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { S3Service } from './s3-service/s3-service.service';
 import { ConfigModule } from '@nestjs/config';
+import { SeedsModule } from './seeds/module/seeds.module';
 
 @Module({
   imports: [
@@ -12,10 +13,11 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.env',
     }),
     MongooseModule.forRoot(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB_NAME}`, {
-      useNewUrlParser: true
+       useNewUrlParser: true
     }),
     UserModule,
     AuthModule,
+    SeedsModule
   ],
   controllers: [AppController],
   providers: [S3Service],
