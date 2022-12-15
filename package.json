@@ -31,6 +31,8 @@
     "@types/mongoose": "^5.11.97",
     "aws-sdk": "^2.1274.0",
     "bcrypt": "^5.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "mongoose": "^6.8.0",
     "nestjs-command": "^3.1.2",
     "passport": "^0.6.0",
@@ -38,7 +40,8 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "typedi": "^0.10.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
